@@ -1,0 +1,7 @@
+# Environments
+venv/
+.idea/
+*.pyc
+
+# Django stuff:
+local_settings.py

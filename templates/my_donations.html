@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}
+    <title>Moje zbiórki</title>
+{% endblock %}
+{% block content %}
+</head>
+  <body>
+    <header class="header--form-page">
+      <nav class="container container--70">
+        {% include 'nav_bar.html' %}
+      </nav>
+
+      <div class="about-us--text">
+          <h2>
+            Moje zbiórki:
+          </h2>
+      <p>
+              {% for i in donations %}
+                  Donacja nr {{ i.id }}:<br>
+            Ilość przekazanych worków: {{ i.quantity }}<br>
+            Organizacja: {{ i.institution.name }}<br>
+            Kategorie:
+             {% for y in i.categories.all %}
+                 {{ y.name }},
+                      {% endfor %}<br>
+              Data przekazania: {{ i.pick_up_date }}<br><br>
+              {% endfor %}
+          </p>
+      </div>
+
+    </header>
+{% endblock %}

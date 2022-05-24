@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}
+    <title>Profil</title>
+{% endblock %}
+{% block content %}
+</head>
+  <body>
+    <header class="header--form-page">
+      <nav class="container container--70">
+        {% include 'nav_bar.html' %}
+      </nav>
+
+      <div class ="about-us--text">
+          <h2>
+            Dane użytkownika:
+          </h2>
+          <p>Imię: {{ user.first_name}}<br>
+             Nazwisko: {{ user.last_name }}<br>
+             Email: {{ user.email}}</p>
+      </div>
+
+    </header>
+{% endblock %}
