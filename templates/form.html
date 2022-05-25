@@ -70,7 +70,7 @@
         {% for i in categories %}
             <div class="form-group form-group--checkbox">
               <label>
-                <input type="checkbox" id="categories" name="categories" value="{{ i.id }}" />
+                <input type="checkbox" id="{{ i.name }}" name="categories" value="{{ i.id }}" />
                 <span class="checkbox"></span>
                 <span class="description">{{ i.name }}</span>
               </label>
@@ -109,7 +109,7 @@
 
                     <div class="form-group form-group--checkbox">
                       <label>
-                        <input type="radio" id="organization" name="institution" value="{{ i.id }}">
+                        <input type="radio" id="{{ i.name }}" name="institution" value="{{ i.id }}">
                         <span class="checkbox radio"></span>
                         <span class="description">
                           <div class="title">"{{ i.name }}"</div>
@@ -152,7 +152,7 @@
 
                 <div class="form-group form-group--inline">
                   <label>
-                    Numer telefonu <input type="number" name="phone_number" id="phone" />
+                    Numer telefonu <input type="phone" name="phone_number" id="phone" />
                   </label>
                 </div>
               </div>
@@ -192,12 +192,14 @@
                 <ul>
                   <li>
                     <span class="icon icon-bag"></span>
-                    <span id="bags2" class="summary--text"></span>
+                    <span id="bags2" class="summary--text">
+                    </span>
                   </li>
 
                   <li>
                     <span class="icon icon-hand"></span>
-                    <span id="organisation2" class="summary--text"></span>
+                    <span id="organisation2" class="summary--text">
+                    </span>
                   </li>
                 </ul>
               </div>

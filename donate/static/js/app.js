@@ -235,39 +235,37 @@ document.addEventListener("DOMContentLoaded", function() {
       this.$step.parentElement.hidden = this.currentStep >= 6;
 
       // TODO: get data from inputs and show them in summary
-      if (this.currentStep == 4) {
 
+      if (this.currentStep == 5) {
+        let quantity = document.getElementById("bags");
+        document.getElementById("bags2").innerText = quantity.value
 
-        // const quantity = document.getElementById("bags");
-        // document.getElementById("bags2").innerText = quantity.value
-        //
-        // const institution = document.querySelector('.checkbox').checked
-        // console.log(institution)
-        // console.log(categories)
-        // document.getElementById("organisation2").innerText = institution.value;
-        //
-        // const address = document.getElementById("address");
-        // document.getElementById("address2").innerText = address.value;
-        //
-        // const city = document.getElementById("city");
-        // document.getElementById("city2").innerText = city.value;
-        //
-        // const zip_code = document.getElementById("postcode");
-        // document.getElementById("postcode2").innerText = zip_code.value;
-        //
-        // const phone_number = document.getElementById("phone");
-        // document.getElementById("phone2").innerText = phone_number.value;
-        //
-        // const pick_up_date = document.getElementById("date");
-        // document.getElementById("date2").innerText = pick_up_date.value;
-        //
-        // const pick_up_time = document.getElementById("time");
-        // document.getElementById("time2").innerText = pick_up_time.value;
-        //
-        // const pick_up_comment = document.getElementById("more_info");
-        // document.getElementById("more_info2").innerText = pick_up_comment.value;
+        let institution = document.querySelector("input[name='institution']:checked");
+        document.getElementById("organisation2").innerText = institution.id;
+
+        let address = document.getElementById("address");
+        document.getElementById("address2").innerText = address.value;
+
+        let city = document.getElementById("city");
+        document.getElementById("city2").innerText = city.value;
+
+        let zip_code = document.getElementById("postcode");
+        document.getElementById("postcode2").innerText = zip_code.value;
+
+        let phone_number = document.getElementById("phone");
+        document.getElementById("phone2").innerText = phone_number.value;
+
+        let pick_up_date = document.getElementById("date");
+        document.getElementById("date2").innerText = pick_up_date.value;
+
+        let pick_up_time = document.getElementById("time");
+        document.getElementById("time2").innerText = pick_up_time.value;
+
+        let pick_up_comment = document.getElementById("more_info");
+        document.getElementById("more_info2").innerText = pick_up_comment.value;
       }
     }
+
     /**
      * Submit form
      *
@@ -278,22 +276,39 @@ document.addEventListener("DOMContentLoaded", function() {
       this.currentStep++;
       this.updateForm();
 
-      const data = new FormData(document.getElementById('formdata'));
-      data.append('csrfmiddlewaretoken', $('#csrf-helper input[name="csrfmiddlewaretoken"]').attr('value'));
+      let data = new FormData(document.getElementById("formdata"))
 
-      fetch('/form/', {
-        method: 'POST',
-        body: data,
-        credentials: 'same-origin',
+      function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+      }
+      let csrftoken = getCookie('csrftoken');
+
+      fetch("/form/", {
+          method: 'POST',
+          body: data,
+          headers: { "X-CSRFToken": csrftoken },
+          credentials: "same-origin",
       })
-      .then(res => res.json())
+      .then(response => response.json())
       .then(data => {
         console.log('Success:', data);
+        window.location.replace('http://127.0.0.1:8000/form_confirm/');
       })
       .catch((error) => {
         console.error('Error:', error);
+        window.location.replace('http://127.0.0.1:8000/form_confirm/');
       });
-
     }
   }
   const form = document.querySelector(".form--steps");

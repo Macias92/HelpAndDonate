@@ -34,3 +34,5 @@ class DonationForm(forms.ModelForm):
         model = Donation
         fields = '__all__'
         exclude = ['user', 'categories']
+        widgets = {
+            'pick_up_date': forms.SelectDateWidget()}

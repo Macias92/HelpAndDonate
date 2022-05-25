@@ -42,46 +42,26 @@ class FormView(LoginRequiredMixin, View):  # Add Donation View
 
     def post(self, request):
         form = DonationForm(request.POST)
-        breakpoint()
+        # breakpoint()
         categories = Category.objects.all()
         institutions = Institution.objects.all()
-        # if form.is_valid():
-        #     donation = form.save()
-        #     donation.set_category(form.cleaned_data['categories'])
-        #     return render(request, 'form-confirmation.html')
-        # return render(request, 'form.html', context={'form': form,
-        #                                              'categories': categories,
-        #                                              'institutions': institutions}
-
         if form.is_valid():
-            quantity = form.cleaned_data.get('quantity')
-            institution_id = form.cleaned_data.get('institution')
-            address = form.cleaned_data.get('address')
-            phone_number = form.cleaned_data.get('phone_number')
-            city = form.cleaned_data.get('city')
-            zip_code = form.cleaned_data.get('zip_code')
-            pick_up_date = form.cleaned_data.get('pick_up_date')
-            pick_up_time = form.cleaned_data.get('pick_up_time')
-            pick_up_comment = form.cleaned_data.get('pick_up_comment')
-            user = request.user
             category_id = form.cleaned_data.get('categories')
-            donation = Donation.objects.create(quantity=quantity,
-                                               institution_id=institution_id,
-                                               address=address,
-                                               phone_number=phone_number,
-                                               city=city,
-                                               zip_code=zip_code,
-                                               pick_up_date=pick_up_date,
-                                               pick_up_time=pick_up_time,
-                                               pick_up_comment=pick_up_comment,
-                                               user_id=user.id,
-                                               )
-
+            donation = form.save(commit=False)
+            donation.user = request.user
+            donation.save()
             donation.categories.add(category_id)
-            return render(request, 'form-confirmation.html')
+            return redirect('confirm')
+
         return render(request, 'form.html', context={'form': form,
                                                      'categories': categories,
                                                      'institutions': institutions})
+
+
+
+class FormConfirmView(View):
+    def get(self, request):
+        return render(request, 'form-confirmation.html')
 
 
 class LoginView(View):  # Login View
