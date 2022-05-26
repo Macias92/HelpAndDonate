@@ -54,4 +54,3 @@ class Donation(models.Model):
                              on_delete=models.CASCADE,
                              null=True,
                              )
-

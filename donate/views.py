@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Sum
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
@@ -13,10 +14,7 @@ class LandingPageView(View):  # HomePage View
     def get(self, request):
         bags = Donation.objects.all().aggregate(Sum('quantity'))
         bags_total = bags['quantity__sum']
-        # institutions = Institution.objects.all().aggregate(Count('donation', distinct=True))
-        # donated_institutions = institutions['donation__count']
         donated_institutions = len(set([x.institution for x in Donation.objects.all()]))
-
         foundations = Institution.objects.all().filter(type=0)
         ngo = Institution.objects.all().filter(type=1)
         loc_collections = Institution.objects.all().filter(type=2)
@@ -39,24 +37,22 @@ class FormView(LoginRequiredMixin, View):  # Add Donation View
                                                      'categories': categories,
                                                      'institutions': institutions})
 
-
     def post(self, request):
         form = DonationForm(request.POST)
-        # breakpoint()
         categories = Category.objects.all()
         institutions = Institution.objects.all()
         if form.is_valid():
-            category_id = form.cleaned_data.get('categories')
+            categories = form.cleaned_data.get('categories')
             donation = form.save(commit=False)
             donation.user = request.user
             donation.save()
-            donation.categories.add(category_id)
-            return redirect('confirm')
+            donation.categories.add(*categories)
+            response = JsonResponse({'url': reverse('confirm')})
+            return response
 
         return render(request, 'form.html', context={'form': form,
                                                      'categories': categories,
                                                      'institutions': institutions})
-
 
 
 class FormConfirmView(View):
@@ -95,12 +91,12 @@ class RegisterView(View):  # Register View
             password = form.cleaned_data.get('password')
             password2 = form.cleaned_data.get('password2')
             if not password == password2:
-                errors.append(("Podane hasła nie są takie same, spróbuj ponownie!"))
+                errors.append("Podane hasła nie są takie same, spróbuj ponownie!")
             if len(errors) == 0:
                 User.objects.create_user(first_name=first_name,
-                                    last_name=last_name,
-                                    email=email,
-                                    password=password)
+                                         last_name=last_name,
+                                         email=email,
+                                         password=password)
                 return redirect(reverse('login'))
             return render(request, 'register.html', context={'errors': errors})
 

@@ -28,7 +28,6 @@ urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('profile_details/', ProfileView.as_view(), name='profile'),
-    path('my_donations/', MyDonationsView.as_view(), name='my_donations')
-
+    path('my_donations/', MyDonationsView.as_view(), name='my_donations'),
 
 ]

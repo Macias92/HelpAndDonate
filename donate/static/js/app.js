@@ -303,11 +303,11 @@ document.addEventListener("DOMContentLoaded", function() {
       .then(response => response.json())
       .then(data => {
         console.log('Success:', data);
-        window.location.replace('http://127.0.0.1:8000/form_confirm/');
+        window.location.replace(data['url']);
       })
       .catch((error) => {
         console.error('Error:', error);
-        window.location.replace('http://127.0.0.1:8000/form_confirm/');
+
       });
     }
   }
